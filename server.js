@@ -39,10 +39,32 @@ app.route('/')
 		  res.sendFile(process.cwd() + '/views/index.html');
     })
 
-app.route('/*').get(function(req, res){
-      var timestamps = moment();
-      console.log(timestamps + ' From routes/index.js');
-  var jsonRes = { "unix": timestamps, "natural": "Je sais pas !!!"};
+// Fill the Json response with data from the moment object.
+function fillJson(jsonObj, moment, unixFormat, naturalFormat){
+    jsonObj.unix = parseInt(moment.format(unixFormat));
+    jsonObj.natural = moment.format(naturalFormat);
+}
+
+/*
+* This route catch the param from the user.
+* 1 : Try to parse it as a unix timestamp.
+* 2 : Try to parse it as a natural format ('MMMM DD, YYYY')
+*/
+app.route('/:timestamp').get(function(req, res){
+  var naturalFormat = 'MMMM DD, YYYY';
+  var unixFormat = 'X';
+  var userInput = req.params.timestamp;
+  // Try to create a moment from a timestamp
+  var resultFromTimeStamp = moment.unix(userInput);
+  var jsonRes = { "unix": null, "natural": null};
+  if(resultFromTimeStamp.isValid()){
+    fillJson(jsonRes, resultFromTimeStamp, unixFormat, naturalFormat);
+  }else{
+    var resultFromNatural = moment(userInput, naturalFormat);
+    if(resultFromNatural.isValid()){
+      fillJson(jsonRes, resultFromNatural, unixFormat, naturalFormat);
+    }
+  }
   res.type('json').send(jsonRes);
 });
 
@@ -61,7 +83,9 @@ app.use(function(err, req, res, next) {
   }  
 })
 
-app.listen(process.env.PORT, function () {
-  console.log('Node.js listening ...');
+var port = process.env.PORT | 8080;
+
+app.listen(port, function () {
+  console.log('Node.js listening on port ' + port);
 });
 

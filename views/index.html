@@ -17,8 +17,8 @@
                 <ul>3) If it does not contain a date or Unix timestamp, it returns null for those properties.</ul>
             </blockquote>
             <h3>Example usage:</h3>
-            <code>https://will-freecodecamp-project.glitch.me/December%2015,%202015</code><br>
-            <code>https://will-freecodecamp-project.glitch.me/1450137600</code>
+            <code>https://will-timestamp-project.glitch.me/December%2015,%202015</code><br>
+            <code>https://will-timestamp-project.glitch.me/1450137600</code>
             <h3>Example output:</h3>
             <code>
                 {
@@ -27,5 +27,14 @@
                 }
             </code>
         </div>
+        <script src="https://code.jquery.com/jquery-2.2.1.min.js"
+            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+            crossorigin="anonymous"></script>
+        <script type="text/javascript">
+                  $.get('/dreams', function(json) {
+                    console.log(json);
+                  });
+        </script>
+
     </body>
 </html>
